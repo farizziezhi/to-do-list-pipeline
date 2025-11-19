@@ -1,0 +1,47 @@
+name: To Do List Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pengecekan kode
+        uses: actions/checkout@v3
+
+      - name: Print Pengecekan Kode
+        run: echo "Cek kode dari ${{ github.repository }}"
+
+      - name: Setup Python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Print Setup Python
+        run: echo "Setup Python versi ${{ steps.setup-python.outputs.python-version }}"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Print Install dependencies
+        run: echo "Install dependencies flake8 dan pytest"
+      
+      - name: Print Run linter
+        run: echo "Mengecek kode menggunakan flake8"
+
+      - name: Run linter
+        run: |
+          flake8 todo.py
+
+      - name: Print Run tests
+        run: echo "Menjalankan unit tests menggunakan pytest"
+      
+      - name: Run tests
+        run: |
+          pytest tests/ --verbose
