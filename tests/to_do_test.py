@@ -1,4 +1,4 @@
-from todo import tambah_kegiatan
+from main import tambah_kegiatan
 
 def test_tambah_kegiatan():
     daftar_kegiatan = []
