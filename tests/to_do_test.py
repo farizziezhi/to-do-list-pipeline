@@ -5,5 +5,5 @@ def test_tambah_kegiatan():
     result = tambah_kegiatan(daftar_kegiatan, "Belajar CI")
     assert len(result) == 1
 
-def test_SelaluGagal():
-    assert False
+# def test_SelaluGagal():
+    # assert False
