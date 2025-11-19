@@ -37,7 +37,7 @@ jobs:
 
       - name: Run linter
         run: |
-          flake8 todo.py
+          flake8 main.py
 
       - name: Print Run tests
         run: echo "Menjalankan unit tests menggunakan pytest"
