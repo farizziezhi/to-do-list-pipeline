@@ -8,21 +8,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+
     steps:
       - name: Pengecekan kode
         uses: actions/checkout@v3
 
       - name: Print Pengecekan Kode
-        run: echo "Cek kode dari ${{ github.repository }}"
+        run: echo "Cek kode dari ${{ github.repository }} pada branch ${{ github.ref }}"
 
-      - name: Setup Python
-        id: setup-python
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
       - name: Print Setup Python
-        run: echo "Setup Python versi ${{ steps.setup-python.outputs.python-version }}"
+        run: echo "Setup Python versi ${{ matrix.python-version }}"
 
       - name: Install dependencies
         run: |
@@ -30,10 +34,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Print Install dependencies
-        run: echo "Install dependencies flake8 dan pytest"
-      
+        run: echo "Sukses menginstall dependencies"
+
       - name: Print Run linter
-        run: echo "Mengecek kode menggunakan flake8"
+        run: echo "Mengecek kode menggunakan flake8 pada main.py"
 
       - name: Run linter
         run: |
@@ -41,7 +45,14 @@ jobs:
 
       - name: Print Run tests
         run: echo "Menjalankan unit tests menggunakan pytest"
-      
+
       - name: Run tests
         run: |
           PYTHONPATH=. pytest tests/ --verbose
+
+      - name: Upload Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-script-${{ matrix.python-version }}
+          path: main.py
